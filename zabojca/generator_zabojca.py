@@ -40,14 +40,13 @@ finally:
     f.close()
 ok = False
 wynik = []
-tryi = 1
-while not ok:
+for tryi in range(100000):
     ok = True
     wynik = []
     last_klasy = ["asd"]
     data = list(data_orig)
     while data:
-        akt = {"klasa" : last_klasy[-1]}
+        akt = {"klasa": last_klasy[-1]}
         count = 0
         while akt["klasa"] in last_klasy:
             akt = random.choice(data)
@@ -67,8 +66,13 @@ while not ok:
         sys.stdout.write("\rPowtarzam..."+str(tryi))
         sys.stdout.flush()
         tryi += 1
+print("")
+if not ok:
+    print("Nie udało się :(")
+    exit(2)
 print("Wykonano")
 print("zapisuje do wynik.txt")
+
 f = open('wynik.txt', 'w')
 f.write("osoba,klasa-osoba,cel\n")
 for i in range(len(wynik)-1):
