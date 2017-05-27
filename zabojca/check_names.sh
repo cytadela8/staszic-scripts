@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Skrypt do wyszukiwania błędnych (trole) i należących do gimnazjum (gimbusy) spośród zgłoszonych na Cenzora. Nie
-# weryfikuje klasy. (Można dodać porównując CLASS z FINGER_KLASA) Pokazuje osoby o takim samym nazwisku, gdy
+# weryfikuje klasy. (Można dodać porównując CLASS z FINGER_CLASS) Pokazuje osoby o takim samym nazwisku, gdy
 # uwzględniając imię nie można znaleźć.
 # Przyjmuje plik CSV z imieniem, nazwiskiem i klasą.
 #
@@ -23,12 +23,12 @@ while read l; do
   NAME=$(echo $l | cut -d',' -f $NAME_COL)
   NAME=$(echo $NAME | xargs)
   CLASS=$(echo $l | cut -d',' -f $CLASS_COL)
-  NAME_S=$(echo $NAME | cut -d' ' -f 2)
-  FINGER_RAW="$(finger $NAME_S 2>/dev/null)"
+  SURNAME=$(echo $NAME | cut -d' ' -f 2)
+  FINGER_RAW="$(finger $SURNAME 2>/dev/null)"
   if [ -z "$FINGER_RAW" ]; then
-    NAME_S=$(echo $NAME_S | iconv -f utf8 -t ascii//TRANSLIT)
+    SURNAME=$(echo $SURNAME | iconv -f utf8 -t ascii//TRANSLIT)
     NAME=$(echo $NAME | iconv -f utf8 -t ascii//TRANSLIT)
-    FINGER_RAW="$(finger $NAME_S 2>/dev/null)"
+    FINGER_RAW="$(finger $SURNAME 2>/dev/null)"
     if [ -z "$FINGER_RAW" ]; then
       echo $NAME w klasie $CLASS nie znaleziony w ogóle !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       continue
@@ -46,8 +46,8 @@ while read l; do
     echo za dużo wyników dla $NAME z klasy $CLASS
     continue
   fi
-  FINGER_KLASA=$(echo $FINGER_DATA | grep "Directory:" | cut -f 4 -d ":" | cut -d'/' -f 3)
-  if [[ $FINGER_KLASA == "gim" ]]; then
+  FINGER_CLASS=$(echo $FINGER_DATA | grep "Directory:" | cut -f 4 -d ":" | cut -d'/' -f 3)
+  if [[ $FINGER_CLASS == "gim" ]]; then
     echo "$NAME - GIMBUS GIMBUS GIMBUS!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!1!"
   fi
 
