@@ -23,19 +23,22 @@ import random
 
 NAME_COL = 1
 KLASA_COL = 2
-MIN_KLASA_SEP = 5
 
-if len(sys.argv) != 2:
-    print("Usage: %s input.csv" % sys.argv[0])
+if len(sys.argv) != 3:
+    print("Usage: %s input.csv MIN_KLAS_SEP" % sys.argv[0])
     exit(1)
 
 f = open(sys.argv[1], 'rt')
+print("Plik z danymi: %s" % sys.argv[1])
+MIN_KLASA_SEP = int(sys.argv[2])
+print("Minimalna separacja klas: %s" % MIN_KLASA_SEP)
 data_orig = []
 try:
     reader = csv.reader(f)
     for row in reader:
         data_orig.append({"name": row[NAME_COL], "klasa": row[KLASA_COL].lower()})
     data_orig = data_orig[1:]
+    print ("Wczytano %s pozycji. Pierwsza pozycja: %s" % (len(data_orig), data_orig[0]))
 finally:
     f.close()
 ok = False
@@ -66,6 +69,8 @@ for tryi in range(100000):
         sys.stdout.write("\rPowtarzam..."+str(tryi))
         sys.stdout.flush()
         tryi += 1
+    if ok:
+        break
 print("")
 if not ok:
     print("Nie udało się :(")
